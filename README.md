@@ -57,7 +57,6 @@ A meta explícita de **80%** no `pom.xml` aplica-se às **linhas** do pacote **`
 |-------------|-------------------------|
 | Testes cobrindo regras de negócio (**80%**) | **Sim:** JaCoCo *check* com mínimo de **80% de linhas** em `com.noelle.teste_tecnico.coupon.service`; testes diretos no serviço + fluxos HTTP que exercitam as mesmas regras. |
 | Banco em memória **H2** | **Sim** (`application.properties` + dependência `h2`). |
-| Publicação no **GitHub** (repositório público) | **A cargo de ti:** criar repo público, fazer `git init`, commit e `git push` para o remoto. |
 | Regras em **objetos de domínio** | **Nesta versão as regras estão no `CouponService`**, não em records/classes de domínio separados. Se precisares de alinhar estritamente ao enunciado, podes extrair de novo um módulo de domínio (ex.: `CouponCode` + `Coupon`) e manter o serviço fino. |
 | **Docker** e **Docker Compose** | **Sim** (`Dockerfile` + `docker-compose.yml`). |
 | **Swagger** | **Sim** (SpringDoc — UI em `/swagger-ui.html`, OpenAPI em `/v3/api-docs`). |
