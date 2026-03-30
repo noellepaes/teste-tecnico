@@ -46,25 +46,10 @@ _Use este bloco para descrever decisões técnicas, o que entregaste no teste e 
 
 A meta explícita de **80%** no `pom.xml` aplica-se às **linhas** do pacote **`com.noelle.teste_tecnico.coupon.service`**, onde estão implementadas a normalização do código, validações de desconto e expiração e a orquestração da criação.
 
-1. Gera o relatório e confirma o *gate* de cobertura:
 
-   ```bash
-   ./mvnw clean verify
-   ```
 
-2. Abre `target/site/jacoco/index.html`, entra em **`com.noelle.teste_tecnico.coupon.service`** → **`CouponService`** e captura o ecrã (ou o resumo do pacote).
+<img width="1170" height="326" alt="Image" src="https://github.com/user-attachments/assets/a7ed8bee-0b9c-4e5b-96c0-99b52db5762c" />
 
-3. Guarda a imagem no repositório, por exemplo:
-
-   **`docs/jacoco-regras-negocio.png`**
-
-4. A imagem abaixo será exibida depois de adicionares esse ficheiro (até lá o Markdown mostra o *alt* e o caminho).
-
-![Cobertura JaCoCo — pacote coupon.service (regras de negócio)](docs/jacoco-regras-negocio.png)
-
-_Se o ficheiro ainda não existir, adiciona `docs/jacoco-regras-negocio.png` após correr o `verify` e tirar a captura do relatório._
-
----
 
 ## Expectativas (nível Pleno) — checklist
 
