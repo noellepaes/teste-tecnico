@@ -1,6 +1,6 @@
 package com.noelle.teste_tecnico.coupon.entity;
 
-import com.noelle.teste_tecnico.coupon.CouponStatus;
+import com.noelle.teste_tecnico.coupon.domain.CouponStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

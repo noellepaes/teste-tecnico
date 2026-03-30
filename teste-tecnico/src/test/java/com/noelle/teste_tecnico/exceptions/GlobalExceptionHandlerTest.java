@@ -1,5 +1,8 @@
 package com.noelle.teste_tecnico.exceptions;
 
+import com.noelle.teste_tecnico.coupon.domain.exception.ExpirationInPastException;
+import com.noelle.teste_tecnico.coupon.domain.exception.InvalidCouponCodeException;
+import com.noelle.teste_tecnico.coupon.domain.exception.MinimumDiscountNotMetException;
 import com.noelle.teste_tecnico.coupon.dto.CouponCreateRequest;
 import com.noelle.teste_tecnico.web.CouponController;
 
@@ -29,24 +32,24 @@ class GlobalExceptionHandlerTest {
 	private final GlobalExceptionHandler handler = new GlobalExceptionHandler();
 
 	@Test
-	void couponValidation_returnsMessage() {
+	void couponDomain_returnsMessage() {
 		ResponseEntity<Map<String, String>> r =
-				handler.couponValidation(new InvalidCouponCodeException("código inválido"));
+				handler.couponDomain(new InvalidCouponCodeException("código inválido"));
 		assertThat(r.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 		assertThat(r.getBody()).containsEntry("message", "código inválido");
 	}
 
 	@Test
-	void couponValidation_minimumDiscount() {
+	void couponDomain_minimumDiscount() {
 		ResponseEntity<Map<String, String>> r =
-				handler.couponValidation(new MinimumDiscountNotMetException(BigDecimal.ZERO));
+				handler.couponDomain(new MinimumDiscountNotMetException(BigDecimal.ZERO));
 		assertThat(r.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 		assertThat(r.getBody().get("message")).contains("0,5");
 	}
 
 	@Test
-	void couponValidation_expirationInPast() {
-		ResponseEntity<Map<String, String>> r = handler.couponValidation(new ExpirationInPastException());
+	void couponDomain_expirationInPast() {
+		ResponseEntity<Map<String, String>> r = handler.couponDomain(new ExpirationInPastException());
 		assertThat(r.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 		assertThat(r.getBody().get("message")).contains("passado");
 	}

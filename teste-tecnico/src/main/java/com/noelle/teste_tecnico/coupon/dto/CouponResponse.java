@@ -1,6 +1,6 @@
 package com.noelle.teste_tecnico.coupon.dto;
 
-import com.noelle.teste_tecnico.coupon.CouponStatus;
+import com.noelle.teste_tecnico.coupon.domain.CouponStatus;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

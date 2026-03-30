@@ -1,15 +1,14 @@
 package com.noelle.teste_tecnico.coupon.service;
 
-import com.noelle.teste_tecnico.coupon.CouponStatus;
+import com.noelle.teste_tecnico.coupon.domain.CouponStatus;
+import com.noelle.teste_tecnico.coupon.domain.exception.ExpirationInPastException;
+import com.noelle.teste_tecnico.coupon.domain.exception.MinimumDiscountNotMetException;
 import com.noelle.teste_tecnico.coupon.dto.CouponCreateRequest;
 import com.noelle.teste_tecnico.coupon.entity.CouponEntity;
 import com.noelle.teste_tecnico.coupon.mapper.CouponMapper;
 import com.noelle.teste_tecnico.coupon.repository.CouponRepository;
 import com.noelle.teste_tecnico.exceptions.CouponAlreadyDeletedException;
 import com.noelle.teste_tecnico.exceptions.CouponNotFoundException;
-import com.noelle.teste_tecnico.exceptions.ExpirationInPastException;
-import com.noelle.teste_tecnico.exceptions.InvalidCouponCodeException;
-import com.noelle.teste_tecnico.exceptions.MinimumDiscountNotMetException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,32 +45,6 @@ class CouponServiceTest {
 	void setUp() {
 		couponMapper = new CouponMapper();
 		couponService = new CouponService(couponRepository, couponMapper, CLOCK);
-	}
-
-	@Test
-	void normalizeCouponCode_removesSpecials() {
-		assertThat(CouponService.normalizeCouponCode("ABC-123")).isEqualTo("ABC123");
-		assertThat(CouponService.normalizeCouponCode("ab@12#xy")).isEqualTo("ab12xy");
-	}
-
-	@Test
-	void normalizeCouponCode_rejectsTooShort() {
-		assertThatThrownBy(() -> CouponService.normalizeCouponCode("a-b-1"))
-				.isInstanceOf(InvalidCouponCodeException.class);
-	}
-
-	@Test
-	void normalizeCouponCode_rejectsTooLong() {
-		assertThatThrownBy(() -> CouponService.normalizeCouponCode("ABCDEFGH"))
-				.isInstanceOf(InvalidCouponCodeException.class);
-		assertThatThrownBy(() -> CouponService.normalizeCouponCode("ABC-123-XY"))
-				.isInstanceOf(InvalidCouponCodeException.class);
-	}
-
-	@Test
-	void normalizeCouponCode_rejectsBlank() {
-		assertThatThrownBy(() -> CouponService.normalizeCouponCode("   "))
-				.isInstanceOf(InvalidCouponCodeException.class);
 	}
 
 	@Test

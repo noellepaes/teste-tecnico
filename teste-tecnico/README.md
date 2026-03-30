@@ -11,10 +11,10 @@ _Use este bloco para descrever decisões técnicas, o que entregaste no teste e 
 - API REST com `POST /coupon` e `DELETE /coupon/{id}`.
 - Persistência com **JPA** e **H2 em memória**; consola H2 ativa em desenvolvimento.
 - **DTOs** de entrada/saída (`CouponCreateRequest`, `CouponResponse`) com validação Jakarta Validation e documentação **Swagger / OpenAPI 3**.
-- Regras de negócio da criação e normalização do código no **`CouponService`**; exclusão lógica na mesma camada, atualizando o estado na entidade.
+- **Objetos de domínio** (`com.noelle.teste_tecnico.coupon.domain`): **`CouponCode`** (normalização do código), **`Coupon`** (criação com regras, soft delete via `markDeleted`), **`CouponStatus`**. O **`CouponService`** só orquestra: chama o domínio, mapeia para **`CouponEntity`** e persiste.
 - Tratamento de erros centralizado em **`GlobalExceptionHandler`** (400 regra de negócio / validação, 404 não encontrado, 409 já excluído).
 - **Testes:** unitários do serviço (Mockito), testes de integração HTTP (`CouponControllerIntegrationTest`), testes do handler de exceções e smoke da aplicação.
-- **JaCoCo:** relatório em `target/site/jacoco`; na fase `verify`, *check* de **≥ 80% de linhas** no pacote `com.noelle.teste_tecnico.coupon.service` (regras de negócio da aplicação).
+- **JaCoCo:** relatório em `target/site/jacoco`; na fase `verify`, *check* de **≥ 80% de linhas** nos pacotes `com.noelle.teste_tecnico.coupon.domain*` e `com.noelle.teste_tecnico.coupon.service`.
 - **Docker** multi-stage (`Dockerfile`) e **`docker compose`** para subir a aplicação na porta 8080.
 
 ---
@@ -44,7 +44,7 @@ _Use este bloco para descrever decisões técnicas, o que entregaste no teste e 
 
 ## Cobertura de testes — regras de negócio (JaCoCo)
 
-A meta explícita de **80%** no `pom.xml` aplica-se às **linhas** do pacote **`com.noelle.teste_tecnico.coupon.service`**, onde estão implementadas a normalização do código, validações de desconto e expiração e a orquestração da criação.
+A meta explícita de **80%** no `pom.xml` aplica-se às **linhas** de **`com.noelle.teste_tecnico.coupon.domain*`** (regras no modelo de domínio) e de **`com.noelle.teste_tecnico.coupon.service`** (orquestração).
 
 1. Gera o relatório e confirma o *gate* de cobertura:
 
@@ -52,7 +52,7 @@ A meta explícita de **80%** no `pom.xml` aplica-se às **linhas** do pacote **`
    ./mvnw clean verify
    ```
 
-2. Abre `target/site/jacoco/index.html`, entra em **`com.noelle.teste_tecnico.coupon.service`** → **`CouponService`** e captura o ecrã (ou o resumo do pacote).
+2. Abre `target/site/jacoco/index.html`, entra em **`com.noelle.teste_tecnico.coupon.domain`** (ex.: `Coupon`, `CouponCode`) e/ou **`CouponService`** e captura o ecrã.
 
 3. Guarda a imagem no repositório, por exemplo:
 
@@ -60,7 +60,7 @@ A meta explícita de **80%** no `pom.xml` aplica-se às **linhas** do pacote **`
 
 4. A imagem abaixo será exibida depois de adicionares esse ficheiro (até lá o Markdown mostra o *alt* e o caminho).
 
-![Cobertura JaCoCo — pacote coupon.service (regras de negócio)](docs/jacoco-regras-negocio.png)
+![Cobertura JaCoCo — domínio e serviço (regras de negócio)](docs/jacoco-regras-negocio.png)
 
 _Se o ficheiro ainda não existir, adiciona `docs/jacoco-regras-negocio.png` após correr o `verify` e tirar a captura do relatório._
 
@@ -70,10 +70,10 @@ _Se o ficheiro ainda não existir, adiciona `docs/jacoco-regras-negocio.png` ap�
 
 | Expectativa | Situação neste projeto |
 |-------------|-------------------------|
-| Testes cobrindo regras de negócio (**80%**) | **Sim:** JaCoCo *check* com mínimo de **80% de linhas** em `com.noelle.teste_tecnico.coupon.service`; testes diretos no serviço + fluxos HTTP que exercitam as mesmas regras. |
+| Testes cobrindo regras de negócio (**80%**) | **Sim:** JaCoCo *check* com **80% de linhas** em `coupon.domain*` e `coupon.service`; testes em `CouponCodeTest`, `CouponTest`, `CouponServiceTest` e integração HTTP. |
 | Banco em memória **H2** | **Sim** (`application.properties` + dependência `h2`). |
 | Publicação no **GitHub** (repositório público) | **A cargo de ti:** criar repo público, fazer `git init`, commit e `git push` para o remoto. |
-| Regras em **objetos de domínio** | **Nesta versão as regras estão no `CouponService`**, não em records/classes de domínio separados. Se precisares de alinhar estritamente ao enunciado, podes extrair de novo um módulo de domínio (ex.: `CouponCode` + `Coupon`) e manter o serviço fino. |
+| Regras em **objetos de domínio** | **Sim:** `CouponCode`, `Coupon` e `CouponStatus` em `coupon.domain`; exceções de regra em `coupon.domain.exception` (`CouponDomainException` e subclasses). |
 | **Docker** e **Docker Compose** | **Sim** (`Dockerfile` + `docker-compose.yml`). |
 | **Swagger** | **Sim** (SpringDoc — UI em `/swagger-ui.html`, OpenAPI em `/v3/api-docs`). |
 
@@ -135,7 +135,7 @@ O Maven Surefire inclui por defeito classes `*Test` e `*Tests`. Ficheiros só co
 
 ## Cobertura de testes (JaCoCo) — comandos
 
-Relatório HTML + *check* no `verify` (mínimo 80% de linhas em `coupon.service`):
+Relatório HTML + *check* no `verify` (mínimo 80% de linhas em `coupon.domain*` e `coupon.service`):
 
 ```bash
 ./mvnw clean verify
@@ -157,6 +157,7 @@ start .\target\site\jacoco\index.html
 
 ## Estrutura resumida
 
+- `coupon.domain` — modelo e regras (`Coupon`, `CouponCode`, `CouponStatus`, exceções de domínio)
 - `coupon` — entidade JPA, repositório, serviço, DTOs, mapper
 - `web` — `CouponController`
 - `exceptions` — `GlobalExceptionHandler` e exceções de negócio

@@ -1,5 +1,6 @@
 package com.noelle.teste_tecnico.exceptions;
 
+import com.noelle.teste_tecnico.coupon.domain.exception.CouponDomainException;
 
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -61,8 +62,8 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.badRequest().body(body(hint != null ? hint : "JSON inválido"));
 	}
 
-	@ExceptionHandler(CouponValidationException.class)
-	public ResponseEntity<Map<String, String>> couponValidation(CouponValidationException ex) {
+	@ExceptionHandler(CouponDomainException.class)
+	public ResponseEntity<Map<String, String>> couponDomain(CouponDomainException ex) {
 		return ResponseEntity.badRequest().body(body(ex.getMessage()));
 	}
 
