@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-class CouponControllerIT {
+class CouponControllerIntegrationTest {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -33,8 +33,7 @@ class CouponControllerIT {
 	@Autowired
 	private CouponRepository couponRepository;
 
-	@Autowired
-	private ObjectMapper objectMapper;
+	private final ObjectMapper objectMapper = new ObjectMapper();
 
 	@Test
 	void postCoupon_returns201AndSanitizedCode() throws Exception {
@@ -149,6 +148,23 @@ class CouponControllerIT {
 										"""
 												.formatted(past)))
 				.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	void postCoupon_rejectsBeanValidationOnEmptyBody() throws Exception {
+		mockMvc.perform(post("/coupon").contentType(MediaType.APPLICATION_JSON).content("{}"))
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.message").exists());
+	}
+
+	@Test
+	void postCoupon_rejectsMalformedJson() throws Exception {
+		mockMvc.perform(
+						post("/coupon")
+								.contentType(MediaType.APPLICATION_JSON)
+								.content("{\"code\": "))
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.message").exists());
 	}
 
 	@Test
