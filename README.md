@@ -48,7 +48,7 @@ A meta explícita de **80%** no `pom.xml` aplica-se às **linhas** do pacote **`
 
 
 
-<img width="1170" height="326" alt="Image" src="https://github.com/user-attachments/assets/a7ed8bee-0b9c-4e5b-96c0-99b52db5762c" />
+<img width="1182" height="354" alt="Image" src="https://github.com/user-attachments/assets/579f0b1f-1207-4ade-830a-d48225519e9c" />
 
 
 ## Expectativas (nível Pleno) — checklist
