@@ -48,10 +48,10 @@ class CouponServiceTest {
 	}
 
 	@Test
-	void create_persistsNormalizedCode() {
+	void create_persistsCode() {
 		var request =
 				new CouponCreateRequest(
-						"XY-12-34",
+						"XY1234",
 						"desc",
 						new BigDecimal("0.5"),
 						Instant.parse("2026-12-31T00:00:00Z"),

@@ -1,10 +1,14 @@
 package com.noelle.teste_tecnico.coupon.mapper;
 
-import com.noelle.teste_tecnico.coupon.domain.Coupon;
+import com.noelle.teste_tecnico.coupon.domain.CouponStatus;
 import com.noelle.teste_tecnico.coupon.dto.CouponResponse;
 import com.noelle.teste_tecnico.coupon.entity.CouponEntity;
 
 import org.springframework.stereotype.Component;
+
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.UUID;
 
 /** Converte entre entidade JPA, DTO de saída e objeto de domínio (sem MapStruct). */
 @Component
@@ -25,19 +29,25 @@ public class CouponMapper {
 				entity.isRedeemed());
 	}
 
-	public CouponEntity toEntity(Coupon coupon) {
-		if (coupon == null) {
-			return null;
-		}
+	public CouponEntity toEntity(
+			UUID id,
+			String code,
+			String description,
+			BigDecimal discountValue,
+			Instant expirationDate,
+			CouponStatus status,
+			boolean published,
+			boolean redeemed) {
 		CouponEntity entity = new CouponEntity();
-		entity.setId(coupon.id());
-		entity.setCode(coupon.code());
-		entity.setDescription(coupon.description());
-		entity.setDiscountValue(coupon.discountValue());
-		entity.setExpirationDate(coupon.expirationDate());
-		entity.setStatus(coupon.status());
-		entity.setPublished(coupon.published());
-		entity.setRedeemed(coupon.redeemed());
+		entity.setId(id);
+		entity.setCode(code);
+		entity.setDescription(description);
+		entity.setDiscountValue(discountValue);
+		entity.setExpirationDate(expirationDate);
+		entity.setStatus(status);
+		entity.setPublished(published);
+		entity.setRedeemed(redeemed);
 		return entity;
 	}
+
 }

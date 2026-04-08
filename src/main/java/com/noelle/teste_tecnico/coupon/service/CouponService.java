@@ -1,11 +1,15 @@
 package com.noelle.teste_tecnico.coupon.service;
 
-import com.noelle.teste_tecnico.coupon.domain.Coupon;
+import com.noelle.teste_tecnico.coupon.domain.Code;
 import com.noelle.teste_tecnico.coupon.dto.CouponCreateRequest;
 import com.noelle.teste_tecnico.coupon.dto.CouponResponse;
+import com.noelle.teste_tecnico.coupon.domain.CouponStatus;
+import com.noelle.teste_tecnico.coupon.domain.DiscountValue;
+import com.noelle.teste_tecnico.coupon.domain.ExpirationDate;
 import com.noelle.teste_tecnico.coupon.entity.CouponEntity;
 import com.noelle.teste_tecnico.coupon.mapper.CouponMapper;
 import com.noelle.teste_tecnico.coupon.repository.CouponRepository;
+import com.noelle.teste_tecnico.exceptions.CouponAlreadyDeletedException;
 import com.noelle.teste_tecnico.exceptions.CouponNotFoundException;
 
 import org.springframework.stereotype.Service;
@@ -29,33 +33,32 @@ public class CouponService {
 
 	@Transactional
 	public CouponResponse create(CouponCreateRequest request) {
-		Coupon coupon =
-				Coupon.createNew(
-						request.code(),
+		Code code = new Code(request.code());
+		DiscountValue discountValue = new DiscountValue(request.discountValue());
+		ExpirationDate expirationDate = new ExpirationDate(request.expirationDate(), clock);
+
+		CouponEntity entity =
+				couponMapper.toEntity(
+						UUID.randomUUID(),
+						code.value(),
 						request.description(),
-						request.discountValue(),
-						request.expirationDate(),
+						discountValue.value(),
+						expirationDate.value(),
+						CouponStatus.ACTIVE,
 						Boolean.TRUE.equals(request.published()),
-						clock);
-		CouponEntity saved = couponRepository.save(couponMapper.toEntity(coupon));
+						false);
+
+		CouponEntity saved = couponRepository.save(entity);
 		return couponMapper.toDTO(saved);
 	}
 
 	@Transactional
 	public void delete(UUID id) {
 		CouponEntity entity = couponRepository.findById(id).orElseThrow(() -> new CouponNotFoundException(id));
-		Coupon coupon =
-				Coupon.restore(
-						entity.getId(),
-						entity.getCode(),
-						entity.getDescription(),
-						entity.getDiscountValue(),
-						entity.getExpirationDate(),
-						entity.getStatus(),
-						entity.isPublished(),
-						entity.isRedeemed());
-		Coupon deleted = coupon.markDeleted();
-		entity.setStatus(deleted.status());
+		if (entity.getStatus() == CouponStatus.DELETED) {
+			throw new CouponAlreadyDeletedException();
+		}
+		entity.setStatus(CouponStatus.DELETED);
 		couponRepository.save(entity);
 	}
 }

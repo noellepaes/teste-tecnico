@@ -36,14 +36,14 @@ class CouponControllerIntegrationTest {
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
 	@Test
-	void postCoupon_returns201AndSanitizedCode() throws Exception {
+	void postCoupon_returns201() throws Exception {
 		mockMvc.perform(
 						post("/coupon")
 								.contentType(MediaType.APPLICATION_JSON)
 								.content(
 										"""
 										{
-										  "code": "ABC-123",
+										  "code": "ABC123",
 										  "description": "Cupom teste",
 										  "discountValue": 0.8,
 										  "expirationDate": "2026-12-31T18:00:00.000Z"
@@ -98,14 +98,14 @@ class CouponControllerIntegrationTest {
 	}
 
 	@Test
-	void postCoupon_rejectsCodeTooShortAfterNormalize() throws Exception {
+	void postCoupon_rejectsCodeTooShort() throws Exception {
 		mockMvc.perform(
 						post("/coupon")
 								.contentType(MediaType.APPLICATION_JSON)
 								.content(
 										"""
 										{
-										  "code": "a@-b@-1",
+										  "code": "AB1",
 										  "description": "x",
 										  "discountValue": 0.5,
 										  "expirationDate": "2026-12-31T18:00:00.000Z"
@@ -115,14 +115,14 @@ class CouponControllerIntegrationTest {
 	}
 
 	@Test
-	void postCoupon_rejectsCodeTooLongAfterNormalize() throws Exception {
+	void postCoupon_rejectsCodeTooLong() throws Exception {
 		mockMvc.perform(
 						post("/coupon")
 								.contentType(MediaType.APPLICATION_JSON)
 								.content(
 										"""
 										{
-										  "code": "ABC-123-XY",
+										  "code": "ABC123XY",
 										  "description": "x",
 										  "discountValue": 0.5,
 										  "expirationDate": "2026-12-31T18:00:00.000Z"

@@ -14,9 +14,8 @@ import java.time.Instant;
 public record CouponCreateRequest(
 		@NotBlank
 		@Schema(
-				description =
-						"Código de entrada; caracteres especiais são removidos. Após a limpeza deve restar exatamente 6 caracteres alfanuméricos.",
-				example = "ABC-123",
+				description = "Código com exatamente 6 caracteres alfanuméricos.",
+				example = "ABC123",
 				requiredMode = Schema.RequiredMode.REQUIRED)
 		String code,
 		@NotBlank
