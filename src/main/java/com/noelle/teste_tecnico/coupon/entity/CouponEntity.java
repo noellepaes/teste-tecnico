@@ -1,7 +1,5 @@
 package com.noelle.teste_tecnico.coupon.entity;
 
-import com.noelle.teste_tecnico.coupon.domain.CouponStatus;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,6 +11,8 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
+
+import com.noelle.teste_tecnico.coupon.domain.valueObjects.CouponStatus;
 
 @Entity
 @Table(name = "coupons")

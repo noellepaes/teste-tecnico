@@ -1,8 +1,8 @@
 package com.noelle.teste_tecnico.coupon.service;
 
-import com.noelle.teste_tecnico.coupon.domain.CouponStatus;
 import com.noelle.teste_tecnico.coupon.domain.exception.ExpirationInPastException;
 import com.noelle.teste_tecnico.coupon.domain.exception.MinimumDiscountNotMetException;
+import com.noelle.teste_tecnico.coupon.domain.valueObjects.CouponStatus;
 import com.noelle.teste_tecnico.coupon.dto.CouponCreateRequest;
 import com.noelle.teste_tecnico.coupon.entity.CouponEntity;
 import com.noelle.teste_tecnico.coupon.mapper.CouponMapper;

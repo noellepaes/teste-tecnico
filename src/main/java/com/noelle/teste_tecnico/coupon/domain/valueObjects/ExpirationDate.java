@@ -1,4 +1,4 @@
-package com.noelle.teste_tecnico.coupon.domain;
+package com.noelle.teste_tecnico.coupon.domain.valueObjects;
 
 import com.noelle.teste_tecnico.coupon.domain.exception.ExpirationInPastException;
 

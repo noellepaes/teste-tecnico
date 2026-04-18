@@ -2,7 +2,7 @@ package com.noelle.teste_tecnico.web;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.noelle.teste_tecnico.coupon.domain.CouponStatus;
+import com.noelle.teste_tecnico.coupon.domain.valueObjects.CouponStatus;
 import com.noelle.teste_tecnico.coupon.repository.CouponRepository;
 
 import org.junit.jupiter.api.Test;

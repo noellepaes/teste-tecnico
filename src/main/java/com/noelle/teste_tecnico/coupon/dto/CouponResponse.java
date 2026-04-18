@@ -1,12 +1,12 @@
 package com.noelle.teste_tecnico.coupon.dto;
 
-import com.noelle.teste_tecnico.coupon.domain.CouponStatus;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
+
+import com.noelle.teste_tecnico.coupon.domain.valueObjects.CouponStatus;
 
 @Schema(description = "Cupom persistido")
 public record CouponResponse(

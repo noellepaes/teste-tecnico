@@ -1,11 +1,11 @@
 package com.noelle.teste_tecnico.coupon.service;
 
-import com.noelle.teste_tecnico.coupon.domain.Code;
 import com.noelle.teste_tecnico.coupon.dto.CouponCreateRequest;
 import com.noelle.teste_tecnico.coupon.dto.CouponResponse;
-import com.noelle.teste_tecnico.coupon.domain.CouponStatus;
-import com.noelle.teste_tecnico.coupon.domain.DiscountValue;
-import com.noelle.teste_tecnico.coupon.domain.ExpirationDate;
+import com.noelle.teste_tecnico.coupon.domain.valueObjects.Code;
+import com.noelle.teste_tecnico.coupon.domain.valueObjects.CouponStatus;
+import com.noelle.teste_tecnico.coupon.domain.valueObjects.DiscountValue;
+import com.noelle.teste_tecnico.coupon.domain.valueObjects.ExpirationDate;
 import com.noelle.teste_tecnico.coupon.entity.CouponEntity;
 import com.noelle.teste_tecnico.coupon.mapper.CouponMapper;
 import com.noelle.teste_tecnico.coupon.repository.CouponRepository;
@@ -31,7 +31,7 @@ public class CouponService {
 		this.clock = clock;
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public CouponResponse create(CouponCreateRequest request) {
 		Code code = new Code(request.code());
 		DiscountValue discountValue = new DiscountValue(request.discountValue());

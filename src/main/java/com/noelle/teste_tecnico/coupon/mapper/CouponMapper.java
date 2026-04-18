@@ -1,6 +1,6 @@
 package com.noelle.teste_tecnico.coupon.mapper;
 
-import com.noelle.teste_tecnico.coupon.domain.CouponStatus;
+import com.noelle.teste_tecnico.coupon.domain.valueObjects.CouponStatus;
 import com.noelle.teste_tecnico.coupon.dto.CouponResponse;
 import com.noelle.teste_tecnico.coupon.entity.CouponEntity;
 
