@@ -8,7 +8,8 @@ API REST em **Spring Boot 4** para cadastro de cupons com **H2** (em memória), 
 - API REST com `POST /coupon` e `DELETE /coupon/{id}`.
 - Persistência com **JPA** e **H2 em memória**; consola H2 ativa em desenvolvimento.
 - **DTOs** de entrada/saída (`CouponCreateRequest`, `CouponResponse`) com validação Jakarta Validation e documentação **Swagger / OpenAPI 3**.
-- Regras de negócio da criação e normalização do código no **`CouponService`**; exclusão lógica na mesma camada, atualizando o estado na entidade.
+- Regras de negócio modeladas com conceitos de **DDD**, usando **Value Objects** (ex.: `Code`, `DiscountValue`, `ExpirationDate`) na criação do cupom.
+- Exclusão lógica (soft delete) no serviço, atualizando estado da entidade sem remover o registro do banco.
 - Tratamento de erros centralizado em **`GlobalExceptionHandler`** (400 regra de negócio / validação, 404 não encontrado, 409 já excluído).
 - **Testes:** unitários do serviço (Mockito), testes de integração HTTP (`CouponControllerIntegrationTest`), testes do handler de exceções e smoke da aplicação.
 - **JaCoCo:** relatório em `target/site/jacoco`; na fase `verify`, *check* de **≥ 80% de linhas** no pacote `com.noelle.teste_tecnico.coupon.service` (regras de negócio da aplicação).
@@ -39,6 +40,33 @@ API REST em **Spring Boot 4** para cadastro de cupons com **H2** (em memória), 
 
 ---
 
+## DDD e Value Objects
+
+O projeto aplica princípios de **Domain-Driven Design** no domínio de cupons:
+
+- **Value Objects** encapsulam regras e invariantes:
+  - `Code` (normalização e formato do código)
+  - `DiscountValue` (valor mínimo de desconto)
+  - `ExpirationDate` (data não pode estar no passado)
+- O serviço de aplicação (`CouponService`) orquestra o caso de uso, criando os VOs antes de persistir.
+- Isso reduz lógica dispersa no controller e melhora a legibilidade/testabilidade das regras de negócio.
+
+---
+
+## Imagens do sistema
+
+Adicione nesta seção capturas do sistema para documentação:
+
+```md
+![Swagger UI](docs/images/swagger-ui.png)
+![H2 Console](docs/images/h2-console.png)
+![Fluxo de criação de cupom](docs/images/create-coupon.png)
+```
+
+> Dica: use a pasta `docs/images` para manter as imagens versionadas no repositório.
+
+---
+
 ## Cobertura de testes — regras de negócio (JaCoCo)
 
 A meta explícita de **80%** no `pom.xml` aplica-se às **linhas** do pacote **`com.noelle.teste_tecnico.coupon.service`**, onde estão implementadas a normalização do código, validações de desconto e expiração e a orquestração da criação.
@@ -54,7 +82,7 @@ A meta explícita de **80%** no `pom.xml` aplica-se às **linhas** do pacote **`
 |-------------|-------------------------|
 | Testes cobrindo regras de negócio (**80%**) | **Sim:** JaCoCo *check* com mínimo de **80% de linhas** em `com.noelle.teste_tecnico.coupon.service`; testes diretos no serviço + fluxos HTTP que exercitam as mesmas regras. |
 | Banco em memória **H2** | **Sim** (`application.properties` + dependência `h2`). |
-| Regras em **objetos de domínio** | **Nesta versão as regras estão no `CouponService`**, não em records/classes de domínio separados. Se precisares de alinhar estritamente ao enunciado, podes extrair de novo um módulo de domínio (ex.: `CouponCode` + `Coupon`) e manter o serviço fino. |
+| Regras em **objetos de domínio** | **Sim:** o fluxo de criação aplica conceitos de DDD com **Value Objects** (`Code`, `DiscountValue`, `ExpirationDate`) para validar e proteger invariantes do domínio. |
 | **Docker** e **Docker Compose** | **Sim** (`Dockerfile` + `docker-compose.yml`). |
 | **Swagger** | **Sim** (SpringDoc — UI em `/swagger-ui.html`, OpenAPI em `/v3/api-docs`). |
 
